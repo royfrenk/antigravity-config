@@ -32,9 +32,9 @@ Antigravity allows switching models mid-conversation. Use this to leverage each 
 - Best for: UI implementation, CSS, animations, responsive design
 - Why: Strong visual/spatial reasoning
 
-**Phase 4: Code Review (Tech Lead)** → **Claude 3 Opus**
-- Best for: Architecture, security, patterns, refactoring
-- Why: Deep understanding of complex codebases
+**Phase 4: Automated Peer Review (Code Review)** → **Gemini 2.0 Pro**
+- Best for: Fast, reasoning-based code review
+- Why: User requested Gemini for automated peer review
 
 **How to switch:**
 1. I'll recommend when to switch
@@ -159,8 +159,8 @@ For each task:
      - Accessibility (keyboard nav, contrast)
    - **Wait for your approval** before proceeding
 
-4. **Code Review Gate**
-   - **Recommended Model:** Switch to Claude 3 Opus (Architecture/Patterns)
+4. **Automated Peer Review (Code Review)**
+   - **Recommended Model:** Switch to Gemini 2.0 Pro (or Flash)
    - **STOP and present changes**
    - Show git diff summary
    - Highlight key changes and rationale
