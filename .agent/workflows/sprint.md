@@ -16,6 +16,29 @@ Execute engineering sprints autonomously with automatic context loading, spec cr
 
 ---
 
+## Multi-Model Strategy
+
+Antigravity allows switching models mid-conversation. Use this to leverage each model's strengths:
+
+**Phase 1: Design & Visuals** → **Gemini 2.0 Pro**
+- Best for: UI implementation, CSS, animations, responsive design
+- Why: Strong visual/spatial reasoning
+
+**Phase 2: Code Review** → **Claude 3 Opus**
+- Best for: Architecture, security, patterns, refactoring
+- Why: Deep understanding of complex codebases
+
+**Phase 3: Implementation** → **Claude 3.5 Sonnet**
+- Best for: Writing code, tests, documentation
+- Why: Fast, accurate, high recall
+
+**How to switch:**
+1. I'll recommend when to switch
+2. You change the model in the interface
+3. We continue the workflow seamlessly
+
+---
+
 ## How It Works
 
 ### Phase 1: Configuration & Context
@@ -119,6 +142,7 @@ For each task:
    - **Performance**: Check for obvious performance issues
 
 3. **Visual Review** (if UI changes)
+   - **Recommended Model:** Switch to Gemini 2.0 Pro (Visual reasoning)
    - **STOP and ask you to review**
    - I'll either:
      - Open browser to show the changes live
@@ -132,6 +156,7 @@ For each task:
    - **Wait for your approval** before proceeding
 
 4. **Code Review Gate**
+   - **Recommended Model:** Switch to Claude 3 Opus (Architecture/Patterns)
    - **STOP and present changes**
    - Show git diff summary
    - Highlight key changes and rationale
