@@ -4,97 +4,194 @@ description: Create a new issue/task. Checks CLAUDE.md for Linear integration an
 
 # Create Issue
 
-User is mid-development and thought of a bug/feature/improvement. Capture it fast so they can keep working.
+Fast issue capture with automatic context detection and smart routing to Linear or roadmap.
 
-**Input:** Any arguments provided by the user (e.g., title, description)
+## Quick Start
 
-## Goal
+```bash
+/create-issue "Save button doesn't work"
+/create-issue                              # I'll ask for details
+```
 
-Create a complete task/issue with:
+---
 
-- Clear title
-- TL;DR of what this is about
-- Current state vs expected outcome
-- **Acceptance criteria** (for features/UI - user-testable actions and expected results)
-- Relevant files that need touching (max 3)
-- Risk/notes if applicable
-- Proper type/priority/effort labels
+## How It Works
 
-## Phase 1: Information Gathering
+### Phase 1: Quick Information Gathering
 
-**Ask questions** to fill gaps - be concise, respect the user's time. They're mid-flow and want to capture this quickly. Usually need:
-
-- What's the issue/feature (if not clear from input)
+I'll ask concise questions to fill gaps (only what's needed):
+- What's the issue/feature? (if not clear from input)
 - Current behavior vs desired behavior
-- Type (bug/feature/improvement) and priority if not obvious
+- Type (bug/feature/improvement) and priority
 
-Keep questions brief. One message with 2-3 targeted questions beats multiple back-and-forths.
+**I'll keep it brief** - you're mid-flow and want to capture this quickly. One message with 2-3 questions beats multiple back-and-forths.
 
-## Phase 2: Configuration Check & Execution
+### Phase 2: Configuration Check
 
-Before creating the issue, check project configuration:
+I'll automatically read `CLAUDE.md` to check:
+- `linear_enabled: true/false` (default: false if missing)
+- Team ID (required if Linear enabled)
+- Issue Prefix (e.g., `EXP`)
 
-1. **Read CLAUDE.md** to extract Linear settings:
-   - Look for "Linear Integration" section
-   - Extract `linear_enabled: true/false` (default: false if missing)
-   - Extract `Team ID: <uuid>` (required if enabled)
-   - Extract `Issue Prefix: <PREFIX>`
+### Phase 3: Create Issue
 
-2. **Determine behavior:**
-   - If `linear_enabled: false` or missing → Skip Linear, only update `docs/roadmap.md`
-   - If `linear_enabled: true` and Team ID missing → Error: "Linear enabled but Team ID not found in CLAUDE.md"
-   - If `linear_enabled: true` and Team ID present → Attempt to create Linear issue. Note: Check if Linear MCP tool is available first.
+**If Linear disabled (or missing):**
+- Add to `docs/roadmap.md` Backlog section
+- Create spec file if needed: `docs/technical-specs/{PREFIX}-##.md`
+- Auto-increment issue number
 
-### Workflow A: Roadmap.md Only (linear_enabled: false)
+**If Linear enabled:**
+- Create Linear issue with MCP tool
+- Set status to "Todo"
+- Add to `docs/roadmap.md` as backup
+- Apply labels: `agent`, `technical` (if applicable)
 
-1. **Edit `docs/roadmap.md`**:
-   - Add the new task to the appropriate section (e.g., Backlog or Current Sprint).
-   - Use the format defined in `roadmap.md` (usually `- [ ] Task description`).
-   - If a detailed spec is needed, create a new file in `docs/technical-specs/EXP-##.md` (incrementing the number) and link it in the roadmap.
+### Phase 4: Confirmation
 
-### Workflow B: Linear + Roadmap.md (linear_enabled: true)
+Show you what was created:
 
-1. **Create Linear Issue**:
-   - Use available Linear MCP tools (e.g., `linear_create_issue`).
-   - Include team parameter from CLAUDE.md.
-   - Set title, description, and labels.
-2. **Update Status**:
-   - Set status to Todo.
-3. **Update Roadmap**:
-   - Add the new Linear issue link/ID to `docs/roadmap.md`.
+```markdown
+✅ Issue created: EXP-36
 
-## Issue Body Format (for specs or descriptions)
+**Title:** Save button doesn't trigger form submission
+**Type:** Bug
+**Priority:** High
+**Added to:** docs/roadmap.md (Backlog)
+
+**Next steps:**
+- Run /sprint to work on it
+- Or continue with your current work
+```
+
+---
+
+## Issue Format
+
+I'll create a well-structured issue with:
 
 ```markdown
 ## TL;DR
-
-[One sentence summary]
+Save button click doesn't trigger form submission on dashboard
 
 ## Current State
-
-[What happens now / what's missing]
+Clicking "Save" button does nothing - no network request, no console errors
 
 ## Expected Outcome
-
-[What should happen / what we want]
+Button should validate form and submit to /api/expenses
 
 ## Acceptance Criteria
 
 **Functional (pass/fail):**
+- [ ] Click Save → Form validates
+- [ ] Valid form → POST to /api/expenses
+- [ ] Invalid form → Show error message
+- [ ] Success → Redirect to expenses list
 
-- [ ] [Action] → [Expected result]
-- [ ] [Action] → [Expected result]
-
-**Quality (requires evals):**
-
-- [ ] [Action] → [Quality outcome - will be expanded into detailed evals during planning]
+**Quality (requires testing):**
+- [ ] Button shows loading state during submission
+- [ ] Error messages are clear and actionable
 
 ## Relevant Files
-
-- `path/to/file1.ts` - [why relevant]
-- `path/to/file2.ts` - [why relevant]
+- `views/dashboard.html` - Contains the form
+- `public/js/dashboard.js` - Button click handler
+- `routes/expenses.js` - API endpoint
 
 ## Notes
-
-[Any risks, dependencies, or considerations - omit if none]
+- May be related to recent refactoring of form validation
+- Check if event listener is properly attached
 ```
+
+---
+
+## Smart Features
+
+### Automatic File Discovery
+I'll use `grep_search` to find relevant files based on the issue description.
+
+### Context-Aware Categorization
+I'll infer if it's a bug, feature, or improvement based on your description.
+
+### Auto-Incrementing Issue Numbers
+No need to manually track issue numbers - I'll find the next available number.
+
+### Acceptance Criteria Generation
+I'll suggest testable acceptance criteria based on the issue type.
+
+---
+
+## Acceptance Criteria Guidelines
+
+**Include for:**
+- Features with user interaction
+- UI changes
+- Bug fixes (how to verify it's fixed)
+
+**Skip for:**
+- Pure refactoring (no user-facing change)
+- Documentation updates
+- Simple config changes
+
+**Categorize as:**
+
+**Functional (pass/fail)** - Binary tests:
+- "Click Save" → "Form submits"
+- "Enter invalid email" → "Error message shows"
+
+**Quality (requires testing)** - Subjective measures:
+- "Load page" → "Page loads quickly"
+- "View results" → "Results are relevant"
+
+---
+
+## Examples
+
+**Quick bug capture:**
+```
+You: /create-issue "Save button broken"
+Me: What happens when you click it?
+You: Nothing
+Me: ✅ Created EXP-36 - added to Backlog
+```
+
+**Feature request:**
+```
+You: /create-issue "Add export to CSV feature"
+Me: [asks about scope, creates detailed spec]
+    ✅ Created EXP-37 with acceptance criteria
+```
+
+**Mid-sprint capture:**
+```
+You: /create-issue "Mobile layout breaks on iPhone"
+Me: [creates issue, doesn't interrupt current sprint]
+    ✅ Added to Backlog - continue with current work
+```
+
+---
+
+## Linear Integration
+
+**If `linear_enabled: true`:**
+- Creates issue in Linear with team parameter
+- Sets status to "Todo"
+- Applies labels: `agent`, `technical`
+- Syncs to `docs/roadmap.md`
+
+**If Linear API fails:**
+- Falls back to roadmap.md only
+- Adds to "Pending Manual Sync" section
+- You can run `/sync-linear` later
+
+**If `linear_enabled: false`:**
+- Only updates `docs/roadmap.md`
+- No Linear API calls made
+
+---
+
+## Rules
+
+- **Fast**: Capture quickly so you can get back to work
+- **Complete**: Include enough detail for future implementation
+- **Testable**: Acceptance criteria should be verifiable
+- **Non-blocking**: Linear failures don't stop issue creation
+- **Auto-increment**: Issue numbers managed automatically

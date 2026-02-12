@@ -4,125 +4,249 @@ description: Run the engineering sprint autonomously. Reads the roadmap and exec
 
 # Autonomous Sprint Execution
 
-Run the engineering sprint autonomously. Reads Linear for Priority 1 task and executes with proper spec creation and plan approval.
+Execute engineering sprints autonomously with automatic context loading, spec creation, and verification.
 
-> **Tip:** Clear context before starting a new sprint to maximize available context.
+## Quick Start
 
-## Linear Configuration
-
-I will check `CLAUDE.md` for Linear integration settings:
-
-- `linear_enabled: true` → Use Linear for issue tracking, sync bidirectionally with roadmap.md
-- `linear_enabled: false` → Use roadmap.md only, skip all Linear MCP calls
-- Missing field → Default to `false` (roadmap.md only)
-
-**If Linear is disabled:**
-
-- Skip all Linear sync attempts
-- Use `docs/roadmap.md` as single source of truth
-
-**If Linear is enabled:**
-
-- Use `/sync-roadmap` (if available) for bidirectional sync
-- Follow existing workflow with soft retry logic
-
-## Workflow
-
-1. **Read Configuration**:
-   - Read `CLAUDE.md` to get `linear_enabled` status and settings.
-
-2. **Sync & Select Issues**:
-   - If enabled, run sync.
-   - **Selection**:
-     - If issue IDs provided (e.g., `/sprint QUO-57`), use them.
-     - If not, check `docs/roadmap.md` (or Linear if enabled) for "Todo" items.
-     - If "Todo" items found, ask to confirm.
-     - If no items, ask user what to work on.
-
-3. **Sprint File Management**:
-   - **Check for active sprint**: `find docs/sprints/ -name "*.active.md"`
-   - **If multiple**: Error, ask user to resolve.
-   - **If one exists**: Resume it.
-   - **If none**: Create new sprint file (e.g., `docs/sprints/sprint-006-feature.active.md`).
-     - Calculate next sprint number based on existing files in `docs/sprints/`.
-
-4. **Technical Spec Check**:
-   - For each issue, check if `docs/technical-specs/{PREFIX}-##.md` exists.
-   - **If missing**, create it:
-     - **Analyze**: I will analyze the codebase to understand requirements.
-     - **Write Spec**: Create the file with "Summary", "Exploration", and "Implementation Plan". (See Template below).
-
-5. **Implementation Plan Checking**:
-   - **Analyze Dependencies**: Check if tasks depend on each other.
-   - **File Conflicts**: Check if tasks modify the same files.
-   - **Create Execution Plan**: Update the spec with a plan (Waves of tasks).
-   - **Approval**: Present the plan to the user for approval.
-
-6. **Execution (The Build Loop)**:
-   - **For each task in the plan**:
-     - **Implementation**:
-       - Update spec status (🟥 -> 🟨).
-       - Implement code changes.
-       - **Verification**: Run build, lint, tests.
-     - **Review Gate**:
-       - **Visual/Design Review**: If UI changes, ask user to verify or check against design.
-       - **Code Review**: I (the agent) will review the code against `rules/coding-style.md` and `rules/security.md`.
-       - **User Review**: Ask user for confirmation/approval before "deploying" (merging/finishing task).
-     - **Completion**:
-       - Update spec status (🟨 -> 🟩).
-       - Mark as deployed/done in sprint file.
-
-7. **Pre-handoff Verification**:
-   - Run full test suite.
-   - Verify all acceptance criteria are met.
-
-8. **Completion**:
-   - **Sync**: Update Linear (if enabled) and `docs/roadmap.md`.
-   - **Close Sprint**:
-     - Rename `.active.md` to `.done.md`.
-     - Update `docs/roadmap.md` (move to Completed).
-
-## Sprint File Template
-
-```markdown
-# Sprint [###]: [Name]
-
-**Status:** 🟨 In Progress
-**Started:** [date]
-**Issues:** [QUO-##]
-
-## Issues in Sprint
-
-| Issue  | Title   | Spec                                 | Status       |
-| ------ | ------- | ------------------------------------ | ------------ |
-| QUO-## | [Title] | [spec](../technical-specs/QUO-##.md) | 🟨 In Review |
-
-## Iteration Log
-
-[Log of bugs/fixes]
-
-## Notes
+```bash
+/sprint                    # Auto-select from roadmap
+/sprint EXP-42            # Specific issue
+/sprint EXP-42 EXP-43     # Multiple issues
 ```
 
-## Technical Spec Template
+---
 
+## How It Works
+
+### Phase 1: Configuration & Context
+
+I'll automatically:
+1. **Read `CLAUDE.md`** to check Linear integration (`linear_enabled: true/false`)
+2. **Load project state** from `docs/PROJECT_STATE.md`
+3. **Check for active sprint** using `find docs/sprints/ -name "*.active.md"`
+4. **Sync with Linear** (if enabled) using `/sync-roadmap`
+
+### Phase 2: Issue Selection
+
+**If you provided issue IDs:**
+- I'll use those directly
+
+**If not:**
+- I'll check `docs/roadmap.md` for "Todo" items
+- Show you the list and ask which to work on
+- Default to Priority 1 if available
+
+### Phase 3: Sprint File Management
+
+I'll check for active sprints:
+- **None found**: Create new sprint file `docs/sprints/sprint-###-[name].active.md`
+- **One found**: Resume it
+- **Multiple found**: Ask you which one to continue
+
+Sprint number auto-increments based on existing files.
+
+### Phase 4: Technical Spec Creation
+
+For each issue, I'll check if `docs/technical-specs/{PREFIX}-##.md` exists.
+
+**If missing**, I'll create it with:
+1. **Codebase Analysis**: Use `grep_search` and `view_file_outline` to understand the codebase
+2. **Dependency Mapping**: Check which files need changes
+3. **Implementation Plan**: Break down into tasks with status indicators (🟥/🟨/🟩)
+
+**Spec Template:**
 ```markdown
 # {PREFIX}-##: [Title]
 
 **Status:** 🟨 In Progress
 
 ## Summary
-
-[Description]
+[What this issue is about]
 
 ## Implementation Plan
 
+### Wave 1: Foundation
 - [ ] 🟥 Task 1: [description]
+  - Files: `path/to/file.js`
+  - Why: [rationale]
+
+### Wave 2: Integration
+- [ ] 🟥 Task 2: [description]
+  - Files: `path/to/file.js`
+  - Depends on: Task 1
+
+## Acceptance Criteria
+- [ ] [User-testable outcome]
 ```
+
+### Phase 5: Plan Approval
+
+I'll present the implementation plan and wait for your approval:
+```
+## Implementation Plan for EXP-42
+
+**Waves:** 2
+**Total Tasks:** 5
+**Estimated Complexity:** Medium
+
+### Wave 1: Database Changes
+- Update schema in utils/database.js
+- Add migration script
+
+### Wave 2: API Implementation
+- Create new endpoint in routes/
+- Add validation middleware
+
+**Approve to proceed?**
+```
+
+### Phase 6: Execution (The Build Loop)
+
+For each task:
+
+1. **Implementation**
+   - Update spec status: 🟥 → 🟨
+   - Make code changes using `multi_replace_file_content` or `write_to_file`
+   - Run verification: `npm run lint && npm test`
+
+2. **Review Gate**
+   - **Visual Review** (if UI changes): Ask you to verify
+   - **Code Review**: Check against coding standards
+   - **Test Coverage**: Ensure tests pass
+
+3. **Completion**
+   - Update spec status: 🟨 → 🟩
+   - Mark as complete in sprint file
+   - Commit changes
+
+### Phase 7: Pre-Handoff Verification
+
+Before marking the sprint complete:
+- ✅ Run full test suite
+- ✅ Verify all acceptance criteria met
+- ✅ Check for unintended file changes
+- ✅ Ensure build succeeds
+
+### Phase 8: Completion & Sync
+
+1. **Update Linear** (if enabled) with status
+2. **Update `docs/roadmap.md`** to reflect completion
+3. **Rename sprint file**: `.active.md` → `.done.md`
+4. **Summary report** with what was accomplished
+
+---
+
+## Smart Features
+
+### Automatic Context Loading
+No need to manually load project state - I'll read all necessary files in parallel.
+
+### Dependency Detection
+I'll analyze task dependencies and execute in the right order (waves).
+
+### File Conflict Detection
+If multiple tasks modify the same file, I'll warn you and adjust the plan.
+
+### Incremental Verification
+Tests run after each task, not just at the end.
+
+### Resume Support
+If a sprint is interrupted, I can resume from the last checkpoint in the spec file.
+
+---
+
+## Sprint File Format
+
+```markdown
+# Sprint 006: Material Design
+
+**Status:** 🟨 In Progress
+**Started:** 2026-02-12
+**Issues:** EXP-31, EXP-32
+
+## Issues in Sprint
+
+| Issue  | Title                    | Spec                                 | Status       |
+| ------ | ------------------------ | ------------------------------------ | ------------ |
+| EXP-31 | Material Design System   | [spec](../technical-specs/EXP-31.md) | 🟩 Done      |
+| EXP-32 | Update Dashboard UI      | [spec](../technical-specs/EXP-32.md) | 🟨 In Review |
+
+## Progress
+
+- [x] EXP-31: All tasks complete, deployed to staging
+- [ ] EXP-32: 3/5 tasks complete
+
+## Notes
+- Material Design tokens defined in public/css/tokens.css
+- Dashboard components updated to use new system
+```
+
+---
+
+## Linear Integration
+
+**If `linear_enabled: true` in CLAUDE.md:**
+- I'll sync status updates to Linear automatically
+- Post comments on issues with progress
+- Update issue status as tasks complete
+
+**If `linear_enabled: false`:**
+- All tracking happens in `docs/roadmap.md`
+- No Linear API calls made
+
+---
+
+## Error Handling
+
+**If tests fail:**
+- I'll show you the error
+- Propose a fix
+- Re-run tests after fixing
+
+**If Linear sync fails:**
+- I'll continue with the sprint
+- Add to "Pending Manual Sync" section
+- You can run `/sync-linear` later
+
+**If you need to pause:**
+- Just say "pause" or "stop"
+- I'll checkpoint current progress to the spec file
+- You can resume later with `/sprint` (I'll detect the active sprint)
+
+---
+
+## Examples
+
+**Simple feature:**
+```
+You: /sprint EXP-42
+Me: [loads context, creates spec, shows plan]
+You: Looks good
+Me: [implements, tests, deploys, marks complete]
+```
+
+**Multi-issue sprint:**
+```
+You: /sprint EXP-42 EXP-43 EXP-44
+Me: [analyzes dependencies, proposes execution order]
+You: Approve
+Me: [executes in waves, reports progress]
+```
+
+**Resume interrupted sprint:**
+```
+You: /sprint
+Me: Found active sprint-006. Last checkpoint: EXP-32 task 3/5 complete. Continue?
+You: Yes
+Me: [resumes from checkpoint]
+```
+
+---
 
 ## Rules
 
-- **Spec-first**: Never implement without a technical spec.
-- **Plan approval**: Wait for user approval of the plan.
-- **Verification**: Run tests before marking tasks complete.
-- **Review**: Always review code against rules.
+- **Spec-first**: Never implement without a technical spec
+- **Plan approval**: Always wait for your approval before coding
+- **Incremental verification**: Test after each task
+- **Checkpoint frequently**: Save progress to spec files
+- **Non-blocking**: Linear failures don't stop the sprint

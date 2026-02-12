@@ -4,52 +4,84 @@ description: Set up documentation structure for a new project.
 
 # New Project Setup
 
-This command sets up the documentation structure for a new project to work with Antigravity agents.
+Automatically set up documentation structure for a new project with interactive templates.
 
-## Documentation Structure
+## Quick Start
 
-Every project needs these files:
+```bash
+/new-project                    # Interactive setup
+/new-project my-app             # With project name
+```
+
+---
+
+## How It Works
+
+### Phase 1: Gather Information
+
+I'll ask you a few questions:
+- Project name
+- Tech stack (frontend, backend, database)
+- Linear integration (yes/no)
+- Deployment setup (staging/production URLs)
+
+### Phase 2: Create Structure
+
+I'll automatically create:
 
 ```
 project/
-├── CLAUDE.md                    # How to work on this project (stable)
+├── CLAUDE.md                    # How to work on this project
 └── docs/
-    ├── PROJECT_STATE.md         # Current codebase state (living document)
-    ├── roadmap.md               # Task index - mirrors Linear (fallback)
+    ├── PROJECT_STATE.md         # Current codebase state
+    ├── roadmap.md               # Task tracking
     ├── technical-specs/         # Spec files per issue
-    │   └── {ISSUE_ID}.md
+    │   └── .gitkeep
     └── sprints/                 # Sprint iteration tracking
-        └── sprint-###-[name].md
+        └── .gitkeep
 ```
+
+### Phase 3: Populate Templates
+
+I'll fill in the templates with your project-specific information:
+- Project name and tech stack
+- Linear configuration (if enabled)
+- Deployment URLs
+- Git workflow
+
+### Phase 4: Confirmation
+
+I'll show you what was created and next steps.
+
+---
+
+## Documentation Structure
 
 ### CLAUDE.md (Root)
 
-**Purpose:** Entry point for agents. How to operate on this project.
+**Purpose:** Entry point for Antigravity. How to operate on this project.
 **Updates:** Rarely. Only when workflows or tooling change.
 
 **Contains:**
-
 - Quick start (points to PROJECT_STATE.md)
 - Running commands (dev server, tests)
-- Working with agents (EM + /sprint workflow)
-- Linear integration (team, issue prefix)
+- Working with Antigravity (/sprint, /iterate, /create-issue)
+- Linear integration (team, issue prefix) - optional
 - Before you commit checklist
 
 **Does NOT contain:**
-
 - File structure (goes in PROJECT_STATE.md)
 - Database schema (goes in PROJECT_STATE.md)
 - API endpoints (goes in PROJECT_STATE.md)
 - Key technical decisions (goes in PROJECT_STATE.md)
-- Known issues (goes in Linear)
+- Known issues (goes in Linear or roadmap.md)
 
 ### docs/PROJECT_STATE.md
 
-**Purpose:** Current state of the codebase. Living reference for agents.
-**Updates:** After every deployment by Developer agent.
+**Purpose:** Current state of the codebase. Living reference for Antigravity.
+**Updates:** After every deployment or major change.
 
 **Contains:**
-
 - File structure
 - Database schema
 - API endpoints
@@ -61,22 +93,23 @@ project/
 
 ### docs/roadmap.md
 
-**Purpose:** Index of all technical specs. Mirrors Linear as a fallback.
+**Purpose:** Index of all technical specs. Mirrors Linear or standalone.
 **Updates:** When issues are created, completed, or status changes.
 
 **Contains:**
-
 - Active sprint tasks with status
 - Backlog items
 - Completed items (recent)
 - Links to spec files
 
-**Use as fallback** when Linear is unavailable.
+**Use as:**
+- Fallback when Linear is unavailable (if Linear enabled)
+- Single source of truth (if Linear disabled)
 
 ### docs/technical-specs/{ISSUE_ID}.md
 
 **Purpose:** Single spec file per issue containing exploration + implementation plan.
-**Updates:** Explorer creates, Plan-Writer updates, Developer tracks progress.
+**Updates:** Created by /sprint, updated during development.
 
 ---
 

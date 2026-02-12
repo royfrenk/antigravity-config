@@ -4,68 +4,171 @@ description: Review a Product Requirements Document thoroughly, extract stories,
 
 # Review PRD
 
-Review a Product Requirements Document thoroughly, extract stories, and create Linear issues (if enabled) or update roadmap.
+Multi-perspective PRD review with automatic story extraction and issue creation.
 
-## Overview
+## Quick Start
 
-1. **Receive PRD**: Read the file/content.
-2. **Review**: Multi-perspective review (Technical, Design, Legal).
-3. **Q&A**: Ask clarifying questions.
-4. **Extract Stories**: Propose actionable tasks.
-5. **Create Issues**: add to `docs/roadmap.md` (and Linear if available).
+```bash
+/review-prd [paste PRD content]
+/review-prd [path to PRD file]
+```
 
-## Workflow
+---
 
-1. **Phase A: Receive PRD**
-   - Read the user provided content or file.
+## How It Works
 
-2. **Phase B: Review**
-   - **Technical**: Scope, Architecture, Edge Cases, Testing.
-   - **Design**: User Experience, States, Platform. (Reference `.agent/skills/design-core.md` if needed).
-   - **Legal**: Privacy, Data, Risk. (Reference `.agent/guides/legal.md` if available).
+### Phase 1: Receive PRD
 
-   **Output**:
+I'll read the PRD from:
+- Pasted content in your message
+- File path you provide
+- Attached document
 
-   ```markdown
-   ## PRD Review: [Name]
+### Phase 2: Multi-Perspective Review
 
-   ### Technical Questions
+I'll review from three perspectives:
 
-   ...
+**1. Technical Review**
+- Scope and feasibility
+- Architecture implications
+- Edge cases and error handling
+- Testing requirements
+- Performance considerations
 
-   ### Design Questions
+**2. Design Review** (using `.agent/skills/design-core.md` if available)
+- User experience flow
+- UI states (loading, error, empty, success)
+- Platform considerations (mobile, desktop, tablet)
+- Accessibility requirements
 
-   ...
+**3. Legal/Compliance Review** (using `.agent/guides/legal.md` if available)
+- Privacy implications
+- Data handling requirements
+- Compliance risks (GDPR, CCPA, etc.)
+- Terms of service updates needed
 
-   ### Legal Considerations
+### Phase 3: Present Questions
 
-   ...
-   ```
+I'll compile questions from all perspectives:
 
-3. **Phase C: Dialogue**
-   - Wait for user answers.
-   - Iterate until requirements are clear.
+```markdown
+## PRD Review: [Feature Name]
 
-4. **Phase E: Extract Stories**
-   - Propose stories in table format.
-   - Wait for user approval.
+### Technical Questions
+1. How should we handle offline mode for this feature?
+2. What's the expected data volume? (impacts database design)
+3. Should this integrate with existing auth system or be separate?
 
-5. **Phase G: Create Issues**
-   - Check `CLAUDE.md` for Linear settings.
-   - **If Linear enabled**: Use `mcp_linear_create_issue` (or equivalent) for each approved story.
-   - **Always**: Add issues to `docs/roadmap.md` Backlog section.
+### Design Questions
+1. What happens when the user has no data yet? (empty state)
+2. How should errors be displayed? (toast, modal, inline?)
+3. Mobile-first or desktop-first approach?
+
+### Legal Considerations
+1. Does this feature collect new user data? (privacy policy update needed)
+2. Are we storing sensitive information? (encryption requirements)
+3. Do we need user consent for this feature?
+```
+
+### Phase 4: Dialogue
+
+I'll wait for your answers and iterate until requirements are clear.
+
+**I'll keep this conversational** - not a rigid Q&A, but a collaborative discussion.
+
+### Phase 5: Extract Stories
+
+Once requirements are clear, I'll propose stories in table format:
+
+```markdown
+## Proposed Stories
+
+| ID | Title | Type | Priority | Effort | Notes |
+|----|-------|------|----------|--------|-------|
+| 1 | User authentication flow | Feature | High | Large | Requires OAuth setup |
+| 2 | Dashboard UI | Feature | High | Medium | Use existing design system |
+| 3 | Data export to CSV | Feature | Medium | Small | Simple implementation |
+| 4 | Error handling | Technical | High | Small | Critical for UX |
+```
+
+I'll wait for your approval before creating issues.
+
+### Phase 6: Create Issues
+
+After approval, I'll:
+
+1. **Check `CLAUDE.md`** for Linear settings
+2. **Create issues** in Linear (if enabled) or roadmap.md
+3. **Add to Backlog** section of `docs/roadmap.md`
+4. **Create spec files** if needed for complex stories
+
+---
+
+## Smart Features
+
+### Automatic Skill Loading
+I'll load design and legal skills if they exist in `.agent/skills/` or `.agent/guides/`.
+
+### Context-Aware Questions
+Questions are tailored to the specific feature being reviewed.
+
+### Story Sizing
+I'll suggest effort estimates based on complexity analysis.
+
+### Dependency Detection
+I'll identify which stories depend on others and note it.
+
+---
 
 ## Output Format for Roadmap
 
 ```markdown
 ## Backlog
 
-| Issue    | Title   | Added  | Notes    |
-| -------- | ------- | ------ | -------- |
-| TICKET-1 | [Title] | [Date] | From PRD |
+| Issue    | Title                  | Added      | Notes    |
+| -------- | ---------------------- | ---------- | -------- |
+| EXP-36   | User authentication    | 2026-02-12 | From PRD |
+| EXP-37   | Dashboard UI           | 2026-02-12 | From PRD |
+| EXP-38   | Data export to CSV     | 2026-02-12 | From PRD |
 ```
+
+---
+
+## Examples
+
+**Simple feature PRD:**
+```
+You: /review-prd "Add export to CSV feature for expenses"
+Me: [reviews, asks 3-4 questions]
+You: [answers]
+Me: [proposes 2 stories, creates issues]
+    ✅ Created EXP-36, EXP-37
+```
+
+**Complex feature PRD:**
+```
+You: /review-prd [pastes detailed PRD]
+Me: [multi-perspective review, 10+ questions]
+You: [answers over multiple messages]
+Me: [proposes 8 stories with dependencies]
+    ✅ Created 8 issues in Backlog
+```
+
+**PRD with legal implications:**
+```
+You: /review-prd "Add user data export feature"
+Me: ⚠️ Legal consideration: This requires GDPR compliance
+    [asks about data handling, consent, encryption]
+You: [clarifies]
+Me: ✅ Created issues with compliance notes
+```
+
+---
 
 ## Rules
 
-- **Do not modify the PRD**: Treat it as an input artifact.
-- **Do not start implementation**: Just create the tickets.
+- **Don't modify the PRD**: Treat it as an input artifact
+- **Don't start implementation**: Just create the tickets
+- **Multi-perspective**: Always review from technical, design, and legal angles
+- **Collaborative**: Iterate until requirements are crystal clear
+- **Actionable**: Stories should be implementable without ambiguity

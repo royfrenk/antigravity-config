@@ -4,40 +4,179 @@ description: Invoke design skills with automatic context detection for marketing
 
 # Design Command
 
-Invoke design skills with automatic context detection.
+Invoke design workflows with automatic context detection and skill loading.
+
+## Quick Start
+
+```bash
+/design landing page          # Auto-detects marketing context
+/design admin dashboard        # Auto-detects dashboard context
+/design user settings          # Auto-detects application context
+/design                        # I'll ask for context
+```
+
+---
 
 ## How It Works
 
-1. **Analyze Request**: Detect context (marketing, applications, dashboards).
-   - Marketing: landing page, hero, pricing.
-   - Applications: admin panel, CRUD, settings.
-   - Dashboards: analytics, charts.
+### Phase 1: Context Detection
 
-2. **Load Skills**:
-   - Always load: `.agent/skills/design-core.md`.
-   - Context specific: `.agent/skills/design-marketing.md`, `.agent/skills/design-applications.md`, or `.agent/skills/design-dashboards.md`.
+I'll analyze your request to detect the design context:
 
-3. **Execute Design Work**:
-   - Follow instructions in the skill file.
-   - Plan layout, components, states.
-   - Review content tone/voice.
+**Marketing** (landing pages, hero sections, pricing):
+- Keywords: landing, hero, pricing, marketing, homepage
+- Focus: Conversion, visual impact, storytelling
 
-## Usage
+**Applications** (admin panels, CRUD, settings):
+- Keywords: admin, panel, settings, form, CRUD
+- Focus: Usability, efficiency, data density
 
-- `/design` -> Ask for context.
-- `/design [description]` -> Auto-detect context.
+**Dashboards** (analytics, charts, metrics):
+- Keywords: dashboard, analytics, charts, metrics, stats
+- Focus: Data visualization, insights, clarity
+
+### Phase 2: Load Skills
+
+I'll automatically load the relevant design skills:
+
+**Always loaded:**
+- `.agent/skills/design-core.md` - Design system fundamentals
+
+**Context-specific:**
+- `.agent/skills/design-marketing.md` - For marketing contexts
+- `.agent/skills/design-applications.md` - For application contexts  
+- `.agent/skills/design-dashboards.md` - For dashboard contexts
+
+If skills don't exist, I'll work with design best practices.
+
+### Phase 3: Execute Design Work
+
+Following the loaded skill instructions, I'll:
+
+1. **Plan Layout**
+   - Define grid system and spacing
+   - Plan component hierarchy
+   - Consider responsive breakpoints
+
+2. **Design Components**
+   - Create reusable components
+   - Define states (default, hover, active, disabled)
+   - Ensure accessibility
+
+3. **Review Content**
+   - Check tone and voice
+   - Ensure clarity and scannability
+   - Validate CTAs and messaging
+
+4. **Implement**
+   - Generate HTML/CSS (or framework components)
+   - Use design tokens for consistency
+   - Add micro-animations where appropriate
+
+---
+
+## Design Process
+
+### 1. Understand Requirements
+- What's the goal of this design?
+- Who's the target user?
+- What actions should they take?
+
+### 2. Create Design Plan
+```markdown
+## Design Plan: [Component Name]
+
+**Context:** Marketing landing page
+**Goal:** Convert visitors to sign-ups
+**Target:** Technical PMs and developers
+
+**Layout:**
+- Hero section with value prop
+- Feature showcase (3-column grid)
+- Pricing table
+- CTA section
+
+**Components:**
+- Hero with gradient background
+- Feature cards with icons
+- Pricing cards with hover effects
+- CTA button (primary action)
+
+**Tokens:**
+- Colors: Primary (#6366f1), Secondary (#8b5cf6)
+- Typography: Inter (headings), System UI (body)
+- Spacing: 4px base unit
+```
+
+### 3. Implement Design
+- Use design tokens from core skill
+- Follow component patterns from context skill
+- Ensure responsive behavior
+
+### 4. Review Against Standards
+- Accessibility (WCAG AA)
+- Performance (optimized assets)
+- Consistency (design system adherence)
+
+---
+
+## Smart Features
+
+### Automatic Skill Loading
+I'll detect context and load the right skills without you specifying them.
+
+### Design Token System
+All designs use a consistent token system for colors, typography, and spacing.
+
+### Component Library
+Reusable components that follow best practices.
+
+### Responsive by Default
+All designs work across mobile, tablet, and desktop.
+
+---
+
+## Examples
+
+**Marketing landing page:**
+```
+You: /design landing page for expense tracking app
+Me: [loads marketing skill, creates hero + features + pricing]
+    ✨ Created landing page with conversion-focused design
+```
+
+**Admin dashboard:**
+```
+You: /design analytics dashboard
+Me: [loads dashboard skill, creates charts + metrics + filters]
+    ✨ Created dashboard with data visualization
+```
+
+**Application UI:**
+```
+You: /design user settings page
+Me: [loads application skill, creates form + navigation + actions]
+    ✨ Created settings page with clear UX
+```
+
+---
 
 ## Skill Locations
 
-- `design-core.md`: `.agent/skills/design-core.md`
-- `design-marketing.md`: `.agent/skills/design-marketing.md`
-- `design-applications.md`: `.agent/skills/design-applications.md`
-- `design-dashboards.md`: `.agent/skills/design-dashboards.md`
+If you want to customize design skills:
 
-## Process
+- **Core**: `.agent/skills/design-core.md`
+- **Marketing**: `.agent/skills/design-marketing.md`
+- **Applications**: `.agent/skills/design-applications.md`
+- **Dashboards**: `.agent/skills/design-dashboards.md`
 
-1. **Read Request**: Analyze user input.
-2. **Read Skill Files**: Use `view_file` to read the relevant skill files.
-3. **Plan**: Create a design plan based on tokens/components defined in core + specific skill.
-4. **Implementation**: Implement design (HTML/CSS/JS or framework components).
-5. **Review**: Check against design standards.
+---
+
+## Rules
+
+- **Context-aware**: Auto-detect design context from request
+- **Skill-based**: Load and follow relevant skill instructions
+- **Token-driven**: Use design tokens for consistency
+- **Responsive**: All designs work across devices
+- **Accessible**: Follow WCAG AA guidelines
+- **Premium**: Avoid basic MVP aesthetics - make it beautiful
