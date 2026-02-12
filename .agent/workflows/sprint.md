@@ -109,15 +109,42 @@ For each task:
    - Make code changes using `multi_replace_file_content` or `write_to_file`
    - Run verification: `npm run lint && npm test`
 
-2. **Review Gate**
-   - **Visual Review** (if UI changes): Ask you to verify
-   - **Code Review**: Check against coding standards
-   - **Test Coverage**: Ensure tests pass
+2. **Self-Review**
+   - **Code Quality**: Check against project standards
+     - Proper error handling
+     - No hardcoded values (use design tokens)
+     - Consistent naming conventions
+     - Comments for complex logic
+   - **Test Coverage**: Verify tests cover new code paths
+   - **Performance**: Check for obvious performance issues
 
-3. **Completion**
+3. **Visual Review** (if UI changes)
+   - **STOP and ask you to review**
+   - I'll either:
+     - Open browser to show the changes live
+     - Generate screenshots of before/after
+     - Describe what changed visually
+   - **You verify:**
+     - Design matches spec/Figma
+     - Responsive on mobile/tablet/desktop
+     - Animations work smoothly
+     - Accessibility (keyboard nav, contrast)
+   - **Wait for your approval** before proceeding
+
+4. **Code Review Gate**
+   - **STOP and present changes**
+   - Show git diff summary
+   - Highlight key changes and rationale
+   - **You verify:**
+     - Logic is correct
+     - No unintended side effects
+     - Follows project patterns
+   - **Wait for your approval** before proceeding
+
+5. **Completion**
    - Update spec status: 🟨 → 🟩
    - Mark as complete in sprint file
-   - Commit changes
+   - Commit changes with descriptive message
 
 ### Phase 7: Pre-Handoff Verification
 
@@ -215,6 +242,58 @@ If a sprint is interrupted, I can resume from the last checkpoint in the spec fi
 
 ---
 
+## Review Policy
+
+### When Reviews Are MANDATORY
+
+**Visual Review (UI changes):**
+- ✅ Any changes to HTML/CSS
+- ✅ New components or layouts
+- ✅ Changes to animations or interactions
+- ✅ Responsive design updates
+
+**Code Review (all changes):**
+- ✅ After each task completion
+- ✅ Before committing to git
+- ✅ Before deploying to staging/production
+
+**I will STOP and wait for your approval** in these cases.
+
+### When You Can Skip Reviews
+
+You can say **"auto-approve"** or **"skip reviews"** for:
+- ❌ Simple bug fixes (typos, obvious errors)
+- ❌ Documentation updates
+- ❌ Test additions (no logic changes)
+- ❌ Dependency updates
+
+**But I'll still:**
+- Show you a summary of changes
+- Run all tests
+- Verify nothing breaks
+
+### How to Control Reviews
+
+**During sprint:**
+```
+You: "Auto-approve code reviews, but stop for visual reviews"
+Me: ✅ Will skip code review gates, but pause for UI changes
+```
+
+```
+You: "Show me everything"
+Me: ✅ Will stop at every review gate
+```
+
+```
+You: "Skip all reviews for this task"
+Me: ✅ Will implement, test, and commit without pausing
+```
+
+**Default behavior:** Stop at both visual and code review gates.
+
+---
+
 ## Examples
 
 **Simple feature:**
@@ -222,8 +301,34 @@ If a sprint is interrupted, I can resume from the last checkpoint in the spec fi
 You: /sprint EXP-42
 Me: [loads context, creates spec, shows plan]
 You: Looks good
-Me: [implements, tests, deploys, marks complete]
+Me: [implements task 1, STOPS for code review]
+    Here's what I changed: [shows diff]
+You: Approved
+Me: [commits, continues to task 2]
 ```
+
+**With auto-approve:**
+```
+You: /sprint EXP-42 --auto-approve
+Me: [loads context, creates spec, shows plan]
+You: Looks good
+Me: [implements all tasks, shows summaries, auto-commits]
+    ✅ Completed 5 tasks, all tests passing
+```
+
+**UI changes:**
+```
+You: /sprint EXP-32
+Me: [implements Material Design changes, STOPS for visual review]
+    I've updated the navigation drawer. Opening browser...
+    [shows live preview]
+You: Looks good, but can you make the pills more rounded?
+Me: [adjusts border-radius, shows again]
+You: Perfect, approved
+Me: [commits and continues]
+```
+
+---
 
 **Multi-issue sprint:**
 ```

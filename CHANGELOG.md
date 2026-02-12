@@ -2,6 +2,27 @@
 
 All notable changes to Antigravity workflows will be documented in this file.
 
+## [2026-02-12] - Added explicit review gates to sprint workflow
+
+### Changed
+- **sprint.md**: Made review gates explicit and actionable
+  - Split "Review Gate" into Self-Review, Visual Review, and Code Review Gate
+  - Added STOP points for visual and code reviews
+  - Added Review Policy section with mandatory vs optional reviews
+  - Added examples showing review flow and auto-approve options
+
+### Added
+- **Review Policy**: Clear guidelines on when reviews are mandatory
+  - Visual reviews: Required for all UI changes
+  - Code reviews: Required after each task
+  - Auto-approve option for simple changes
+  - Examples of controlling review behavior
+
+### Reason
+User reported that sprint didn't pause for design/code reviews. Made review gates explicit with clear STOP points and approval requirements.
+
+---
+
 ## [2026-02-12] - Complete workflow redesign for Antigravity
 
 ### Changed
