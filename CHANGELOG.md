@@ -2,6 +2,23 @@
 
 All notable changes to Antigravity workflows will be documented in this file.
 
+## [2026-02-12] - Made review gates MANDATORY with explicit blocking
+
+### Changed
+- **sprint.md Phase 6**: Review gates now have explicit "🛑 MANDATORY STOP" language
+  - Added "DO NOT PROCEED WITHOUT USER APPROVAL" to each gate
+  - Specified exact approval phrases: "Approved", "LGTM", "Yes"
+  - Added rejection handling: "No", "Fix X"
+  - Added skip option: "Skip visual/code/peer review"
+  - Added critical warning at Phase 6 start
+
+### Why
+User reported that AI agent skipped review gates despite workflow saying "STOP and wait". 
+The original language was too vague - agent interpreted it as suggestion, not requirement.
+New language makes blocking behavior explicit and enforceable.
+
+---
+
 ## [2026-02-12] - Added explicit review gates to sprint workflow
 
 ### Changed
@@ -16,7 +33,8 @@ All notable changes to Antigravity workflows will be documented in this file.
   - **EM/Planner Tasks** (/create-issue, /review-prd, /sprint Phase 1): **Claude 3 Opus**
   - **Implementation** (/sprint Phase 2): **Claude 3.5 Sonnet**
   - **Visual Review** (/sprint Phase 3): **Gemini 2.0 Pro**
-  - **Code Review** (/sprint Phase 4): **Claude 3 Opus**
+  - **Code Review** (/sprint Phase 4): **Claude 3 Opus** (Tech Lead)
+  - **Peer Review/QA** (/sprint Phase 5): **Gemini 2.0 Pro** (Final QA)
 - **Review Policy**: Clear guidelines on when reviews are mandatory
   - Visual reviews: Required for all UI changes
   - Code reviews: Required after each task

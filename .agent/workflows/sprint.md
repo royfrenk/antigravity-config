@@ -133,6 +133,11 @@ I'll present the implementation plan and wait for your approval:
 
 ### Phase 6: Execution (The Build Loop)
 
+**⚠️ CRITICAL: Review gates are MANDATORY**
+- Steps 3, 4, and 5 require explicit user approval
+- DO NOT skip to Completion without approval at each gate
+- If user says "skip reviews", document this in commit message
+
 For each task:
 
 1. **Implementation**
@@ -151,35 +156,69 @@ For each task:
 
 3. **Visual Review** (if UI changes)
    - **Recommended Model:** Switch to Gemini 2.0 Pro (Visual reasoning)
-   - **STOP and ask you to review**
-   - I'll either:
-     - Open browser to show the changes live
-     - Generate screenshots of before/after
-     - Describe what changed visually
-   - **You verify:**
-     - Design matches spec/Figma
-     - Responsive on mobile/tablet/desktop
-     - Animations work smoothly
-     - Accessibility (keyboard nav, contrast)
-   - **Wait for your approval** before proceeding
+   
+   **🛑 MANDATORY STOP - DO NOT PROCEED WITHOUT USER APPROVAL**
+   
+   I MUST:
+   - Open browser with live preview OR generate before/after screenshots
+   - Present visual changes clearly
+   - Ask: "Do you approve the visual implementation?"
+   
+   **Wait for explicit approval:**
+   - ✅ "Approved" / "Looks good" / "Yes" → Proceed to Code Review
+   - ❌ "No" / "Change X" → Make adjustments, re-present
+   - ⏸️ "Skip visual review" → Proceed (only if you explicitly say this)
+   
+   **You verify:**
+   - Design matches spec/Figma
+   - Responsive on mobile/tablet/desktop
+   - Animations work smoothly
+   - Accessibility (keyboard nav, contrast)
 
 4. **Code Review Gate (Tech Lead)**
    - **Recommended Model:** Switch to Claude 3 Opus
-   - **STOP and present changes**
-   - Show git diff summary
-   - Highlight key changes and rationale
-   - **You verify:**
-     - Logic is correct
-     - No unintended side effects
-     - Follows project patterns
-   - **Wait for your approval** before proceeding
+   
+   **🛑 MANDATORY STOP - DO NOT PROCEED WITHOUT USER APPROVAL**
+   
+   I MUST:
+   - Run `git diff` or show file-by-file changes
+   - Present summary table of modified files
+   - Highlight key changes and potential risks
+   - Ask: "Do you approve these code changes?"
+   
+   **Wait for explicit approval:**
+   - ✅ "Approved" / "LGTM" / "Yes" → Proceed to Peer Review
+   - ❌ "No" / "Fix X" → Make adjustments, re-present
+   - ⏸️ "Skip code review" → Proceed (only if you explicitly say this)
+   
+   **You verify:**
+   - Logic is correct
+   - No unintended side effects
+   - Follows project patterns
+   - Security considerations addressed
 
 5. **Automated Peer Review (QA / Staging)**
    - **Recommended Model:** Switch to Gemini 2.0 Pro
-   - **Run full test suite** on staging/local environment
-   - **Check for visual regressions** or unexpected behavior
-   - **Verify acceptance criteria** one last time
-   - **Wait for your final sign-off**
+   
+   **🛑 MANDATORY STOP - DO NOT PROCEED WITHOUT USER APPROVAL**
+   
+   I MUST:
+   - Run full test suite: `npm test`
+   - Check for visual regressions (if UI changes)
+   - Verify all acceptance criteria from spec
+   - Present test results and final summary
+   - Ask: "Ready to deploy/complete?"
+   
+   **Wait for explicit approval:**
+   - ✅ "Approved" / "Ship it" / "Yes" → Proceed to Completion
+   - ❌ "No" / "Fix tests" → Fix issues, re-run
+   - ⏸️ "Skip peer review" → Proceed (only if you explicitly say this)
+   
+   **Final checks:**
+   - All tests passing
+   - No console errors
+   - Acceptance criteria met
+   - Ready for production
 
 6. **Completion**
    - Update spec status: 🟨 → 🟩
