@@ -15,6 +15,14 @@ Fast issue capture with automatic context detection and smart routing to Linear 
 
 ---
 
+## Recommended Model
+
+**Claude 3 Opus** (EM/Planner)
+- Best for: Understanding intent, categorizing issues, writing clear descriptions
+- Why: High reasoning capability ensures high-quality issue creation
+
+---
+
 ## How It Works
 
 ### Phase 1: Quick Information Gathering

@@ -15,6 +15,14 @@ Multi-perspective PRD review with automatic story extraction and issue creation.
 
 ---
 
+## Recommended Model
+
+**Claude 3 Opus** (EM/Planner)
+- Best for: Deep analysis, story extraction, finding edge cases
+- Why: Superior long-context reasoning and attention to detail
+
+---
+
 ## How It Works
 
 ### Phase 1: Receive PRD

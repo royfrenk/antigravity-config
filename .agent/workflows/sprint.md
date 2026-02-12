@@ -20,17 +20,21 @@ Execute engineering sprints autonomously with automatic context loading, spec cr
 
 Antigravity allows switching models mid-conversation. Use this to leverage each model's strengths:
 
-**Phase 1: Design & Visuals** → **Gemini 2.0 Pro**
+**Phase 1: Planning & Architecture (EM/Planner)** → **Claude 3 Opus**
+- Best for: Spec creation, dependency analysis, roadmap planning
+- Why: Superior reasoning and long-term planning
+
+**Phase 2: Implementation (Developer)** → **Claude 3.5 Sonnet**
+- Best for: Writing code, tests, documentation
+- Why: Fast, accurate, high recall
+
+**Phase 3: Design & Visuals (Designer)** → **Gemini 2.0 Pro**
 - Best for: UI implementation, CSS, animations, responsive design
 - Why: Strong visual/spatial reasoning
 
-**Phase 2: Code Review** → **Claude 3 Opus**
+**Phase 4: Code Review (Tech Lead)** → **Claude 3 Opus**
 - Best for: Architecture, security, patterns, refactoring
 - Why: Deep understanding of complex codebases
-
-**Phase 3: Implementation** → **Claude 3.5 Sonnet**
-- Best for: Writing code, tests, documentation
-- Why: Fast, accurate, high recall
 
 **How to switch:**
 1. I'll recommend when to switch

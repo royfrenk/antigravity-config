@@ -12,10 +12,11 @@ All notable changes to Antigravity workflows will be documented in this file.
   - Added examples showing review flow and auto-approve options
 
 ### Added
-- **Multi-Model Support**: Sprint workflow now includes explicit model switching recommendations
-  - Design Review: Recommends switching to Gemini 2.0 Pro
-  - Code Review: Recommends switching to Claude 3 Opus
-  - Implementation: Recommends Claude 3.5 Sonnet
+- **Multi-Model Support**: Workflows now include explicit model recommendations
+  - **EM/Planner Tasks** (/create-issue, /review-prd, /sprint Phase 1): **Claude 3 Opus**
+  - **Implementation** (/sprint Phase 2): **Claude 3.5 Sonnet**
+  - **Visual Review** (/sprint Phase 3): **Gemini 2.0 Pro**
+  - **Code Review** (/sprint Phase 4): **Claude 3 Opus**
 - **Review Policy**: Clear guidelines on when reviews are mandatory
   - Visual reviews: Required for all UI changes
   - Code reviews: Required after each task
