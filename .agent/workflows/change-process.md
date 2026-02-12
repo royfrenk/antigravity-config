@@ -4,194 +4,180 @@ description: Update global Antigravity configurations and sync to config repo.
 
 # Change Process
 
-**Note:** This command updates global `antigravity` configurations and syncs them to your config repository.
+Update workflows systematically with automatic discovery, parallel analysis, and smart syncing.
 
-## Instructions
+## How to Use
 
-You are helping the User update the engineering process. Your goal is to ensure changes are consistent across all workflow files and don't add noise.
+```bash
+/change-process [what you want to change]
+```
 
-## 1. Understand the Change
-
-**STOP AND ASK QUESTIONS - DO NOT PROCEED UNTIL USER RESPONDS**
-
-Output ONLY the following question block and nothing else:
+If you don't provide details, I'll ask you what you want to change.
 
 ---
 
-## Phase 1: Understanding Your Change
+## Step 1: Understand the Change
 
-Please answer these questions so I can review the right files:
+I'll start by asking you a few quick questions about the change you want to make. This helps me understand:
+- What needs to change
+- Why you're making the change
+- What scope it affects (global vs project-specific)
+- Any edge cases or dependencies
 
-**1. What change do you want to make?**
-   (Describe the change in your own words)
-
-**2. Why are you making this change?**
-   - What problem does this solve?
-   - What triggered this request?
-
-**3. What's the scope of this change?**
-   - Does this affect all projects (global workflows)?
-   - Does this affect just one project?
-   - Something else?
-
-**Based on your description, I may also need to know:**
-
-[Include ONLY the applicable questions below - skip sections that don't apply]
-
-**If the change affects workflow:**
-- Does this change the order of operations?
-- Does this change who is responsible for what?
-
-**If adding a new file or concept:**
-- Who creates it?
-- Who updates it?
-- When does it get created/updated?
-
-**If removing something:**
-- What replaces it?
-- How do we handle existing references to it?
+**I'll keep this conversational** - if you've already explained something, I won't ask again.
 
 ---
 
-I'll wait for your answers before reviewing the affected files.
+## Step 2: Auto-Discovery & Analysis
 
-## 2. Review All Files
+I'll automatically:
 
-Read and analyze every file that might be affected:
+1. **Discover all workflows** using `find_by_name` to scan `.agent/workflows/`
+2. **Read relevant files in parallel** using multiple `view_file` calls
+3. **Search for references** using `grep_search` to find cross-file dependencies
+4. **Check project files** like `CLAUDE.md`, `docs/roadmap.md`, etc.
 
-### Global Workflows (.agent/workflows/)
-
-**Commands:**
-- `.agent/workflows/context.md` - Load project context
-- `.agent/workflows/sprint.md` - Autonomous execution
-- `.agent/workflows/create-issue.md` - Quick issue capture
-- `.agent/workflows/new-project.md` - Project setup guide
-- `.agent/workflows/learning-opportunity.md` - Teaching mode
-- `.agent/workflows/change-process.md` - This command
-
-### Current Project Files
-
-Read the project's CLAUDE.md to find the docs location, then check:
-- `CLAUDE.md` - Project entry point
-- `docs/PROJECT_STATE.md` - Codebase state
-- `docs/roadmap.md` - Task index
-- `docs/technical-specs/` - Spec files
-
-## 3. Impact Analysis
-
-For each file, determine:
-1. **Needs update?** (Yes/No/Maybe)
-2. **What changes?** (Specific sections or references)
-3. **Risk level:** (Low = wording change, Medium = workflow change, High = structural change)
-
-Present findings as a table:
+Then I'll present an **impact analysis table**:
 
 ```
-| File | Needs Update | What Changes | Risk |
-|------|--------------|--------------|------|
-| sprint.md | Yes | Add new step to workflow | Medium |
-| create-issue.md | No | — | — |
-| context.md | Yes | Update diagram | Low |
+| File | Impact | What Changes | Risk |
+|------|--------|--------------|------|
+| sprint.md | High | Update workflow step 3 | Medium |
+| create-issue.md | None | — | — |
+| context.md | Low | Update terminology | Low |
 ```
-
-## 4. Challenge the Change
-
-**STOP AND ASK CHALLENGE QUESTIONS - DO NOT PROCEED UNTIL USER RESPONDS**
-
-After completing file review and impact analysis, check if you found any gaps, contradictions, complexity issues, or scope concerns.
-
-**If you found concerns:**
-
-Output ONLY the following question block and nothing else:
 
 ---
 
-## Phase 4: Challenge Questions
+## Step 3: Challenge & Validate
 
-Based on my file review and impact analysis, I need clarification on these points:
+Before proposing changes, I'll check for:
+- **Gaps**: Missing edge cases or incomplete logic
+- **Contradictions**: Conflicts with other workflows
+- **Complexity**: Is this adding unnecessary noise?
+- **Scope creep**: Should this be split into multiple changes?
 
-[Include ONLY the sections below that have actual concerns - skip empty sections]
-
-**Gaps I Found:**
-
-[List each gap with a numbered question:]
-1. I noticed [X] isn't covered. How should that work?
-2. What happens when [edge case]?
-3. Who is responsible for [new thing]?
-
-**Contradictions I Found:**
-
-[List each contradiction with a numbered question:]
-1. This conflicts with [existing rule in file.md]. Which takes priority?
-
-**Complexity/Noise Concerns:**
-
-[Ask if the change seems to add unnecessary complexity:]
-1. Is this adding complexity that could be avoided?
-2. Could this be solved with existing tools/processes instead?
-
-**Scope Concerns:**
-
-[Ask if scope seems unclear or too broad:]
-1. You mentioned [X] - is that part of this change or should it be separate?
+If I find issues, I'll point them out. If not, I'll move forward.
 
 ---
 
-Please address these concerns before I propose the specific file changes.
+## Step 4: Propose Specific Changes
 
-**If you found NO concerns:**
+I'll show you exactly what I plan to change:
 
-Skip the question block entirely. Instead, output:
-
-```
-I reviewed all affected files and found no gaps, contradictions, or scope issues. Proceeding to propose specific changes.
-```
-
-## 5. Propose Changes
-
-Once clarified, present the exact changes:
-
-```
+```markdown
 ## Proposed Changes
 
-### 1. .agent/workflows/context.md
-**Section:** Workflow
-**Change:** Add step 5: "Update roadmap.md"
-**Reason:** [why]
+### 1. .agent/workflows/sprint.md (Lines 45-52)
 
-[Continue for all affected files]
+**Current:**
+...existing code...
+
+**New:**
+...updated code...
+
+**Reason:** [explanation]
+
+---
+
+### 2. .agent/workflows/context.md (Lines 12-15)
+
+**Current:**
+...existing code...
+
+**New:**
+...updated code...
+
+**Reason:** [explanation]
 ```
 
-Ask: "Does this look right? Any adjustments before I make the changes?"
+You can:
+- Approve all changes
+- Request modifications
+- Approve some, reject others
 
-## 6. Execute and Sync
+---
 
-Only after the User confirms:
-1. Make all changes to `.agent/workflows/` (the live config).
-2. Verify consistency across files.
-3. Summarize what was changed.
-4. **Sync to Antigravity Config Repo:**
+## Step 5: Execute & Sync
 
+After your approval, I'll:
+
+1. **Make the changes** using `multi_replace_file_content` (for multiple edits) or `replace_file_content` (for single edits)
+2. **Verify consistency** by checking cross-references
+3. **Show git diff** to confirm what's changing
+4. **Sync to repo**:
    ```bash
-   # Ensure target directory exists
-   mkdir -p /Users/royfrenkiel/Documents/repos/antigravity-config/.agent/workflows
-
-   # Copy workflows to repo
-   cp -R .agent/workflows/*.md /Users/royfrenkiel/Documents/repos/antigravity-config/.agent/workflows/
-
-   # Commit and push
+   # Copy to antigravity-config repo
+   cp .agent/workflows/*.md /Users/royfrenkiel/Documents/repos/antigravity-config/.agent/workflows/
+   
+   # Show diff and commit
    cd /Users/royfrenkiel/Documents/repos/antigravity-config
-   git add -A && git commit -m "process: $ARGUMENTS" && git push origin main
+   git diff
+   git add -A && git commit -m "process: [description]" && git push origin main
    ```
+
+---
+
+## Smart Features
+
+### Automatic Workflow Discovery
+No hardcoded file lists. I'll discover workflows dynamically:
+```bash
+find .agent/workflows/ -name "*.md" -type f
+```
+
+### Parallel File Reading
+I'll read multiple files at once for faster analysis.
+
+### Reference Checking
+I'll use `grep_search` to find all references to changed concepts across all workflows.
+
+### Change Tracking
+Each sync updates `/Users/royfrenkiel/Documents/repos/antigravity-config/CHANGELOG.md` with:
+- Date and description
+- Files changed
+- Reason for change
+
+### Validation
+Before syncing, I'll check:
+- YAML frontmatter is valid
+- Markdown syntax is correct
+- File references exist
+- No broken cross-references
+
+---
+
+## Examples
+
+**Simple terminology change:**
+```
+You: "Change all references from 'Claude Code' to 'Antigravity'"
+Me: [discovers 3 workflows affected, shows changes, syncs after approval]
+```
+
+**Workflow addition:**
+```
+You: "Add a new step to /sprint that checks for breaking changes"
+Me: [analyzes sprint.md, proposes insertion point, shows before/after, syncs]
+```
+
+**Multi-workflow update:**
+```
+You: "Update the checkpoint format to include git commit hash"
+Me: [finds /checkpoint, /sprint, /iterate all use checkpoints, updates all three]
+```
+
+---
 
 ## Rules
 
 - **Don't assume** - Ask if unclear
-- **Don't add noise** - Every addition should solve a real problem
-- **Challenge gently** - The User might have missed something, help them see it
-- **Be thorough** - Read every file, don't skip
-- **Be specific** - Vague changes lead to inconsistency
+- **Don't add noise** - Every change should solve a real problem
+- **Challenge gently** - Point out issues early
+- **Be thorough** - Check all affected files
+- **Be specific** - Show exact before/after changes
+- **Validate** - Test that references still work
 
 ---
 
-**Start by asking:** "What change do you want to make to the process?"
+**Ready to start?** Tell me what you want to change, or just say `/change-process` and I'll ask.
